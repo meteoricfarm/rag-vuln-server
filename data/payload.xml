@@ -1,0 +1,4 @@
+<!DOCTYPE foo [<!ENTITY example SYSTEM "/etc/passwd"> ]>
+<note>
+    <content>&example;</content>
+</note>

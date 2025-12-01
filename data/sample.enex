@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-export SYSTEM "http://xml.evernote.com/pub/evernote-export.dtd">
+<en-export export-date="20251020T120000Z" application="Evernote/10.0">
+    <note>
+        <title>Sample Note</title>
+        <content>
+            <![CDATA[
+            <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+            <!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
+            <en-note>
+                <p>This is a sample note content.</p>
+                <p>It supports <b>rich text</b> and <i>formatting</i>.</p>
+            </en-note>
+            ]]>
+        </content>
+        <created>20251020T100000Z</created>
+        <updated>20251020T110000Z</updated>
+        <tag>SampleTag</tag>
+        <note-attributes>
+            <author>John Doe</author>
+            <source>desktop.win</source>
+        </note-attributes>
+    </note>
+</en-export>
