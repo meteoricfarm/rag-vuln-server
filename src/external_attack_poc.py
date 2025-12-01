@@ -2,11 +2,12 @@
 # External user interaction PoC for RAG system information exfiltration.
 
 import uvicorn
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Response
 from pydantic import BaseModel
 from pathlib import Path
 import shutil
 import os
+import json
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -73,7 +74,10 @@ async def upload_and_poison_knowledge_base(file: UploadFile = File(...)):
         vector_db = FAISS.from_documents(docs, embeddings)
         print("[+] Knowledge base has been poisoned with the leaked data.")
         
-        return {"status": "success", "message": "Knowledge base created (and poisoned)."}
+        response_data = {"status": "success", "message": "Knowledge base created (and poisoned)."}
+        # Manually create JSON string and add a newline for cleaner curl output
+        json_string = f'{{"status":"{response_data["status"]}", "message":"{response_data["message"]}"}}\n'
+        return Response(content=json_string, media_type="application/json")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -104,7 +108,10 @@ async def query_llm(request: QueryRequest):
         result = response.get("result", "No result found.")
         
         print(f"[!] Leaked information via LLM response.")
-        return {"status": "success", "leaked_answer": result}
+        response_data = {"status": "success", "leaked_answer": result}
+        # Manually create JSON string and add a newline for cleaner curl output
+        json_string = json.dumps(response_data) + "\n"
+        return Response(content=json_string, media_type="application/json")
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -115,4 +122,7 @@ if __name__ == "__main__":
     port = int(os.getenv("SERVER_PORT", "8080"))
     print("\nTo run the server, use the command:")
     print(f"uvicorn external_attack_poc:app --host {host} --port {port}")
-    uvicorn.run(app, host=host, port=port)
+    try:
+        uvicorn.run(app, host=host, port=port)
+    finally:
+        print()
